@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	"os"
 	"strings"
 
 	"github.com/adrg/frontmatter"
@@ -54,9 +53,11 @@ func (doc *tDocument) splitFrontMatter() {
 func (doc *tDocument) validate() {
 	if len(doc.Errors) > 0 {
 		fmt.Printf("%-7s %q, %s\n", "Invalid", doc.Filename, doc.Errors)
-		os.Exit(1)
+		exitCode = 1
 	} else {
-		fmt.Printf("%-7s %q\n", "Ok", doc.Filename)
+		if CLI.ErrorsOnly == false {
+			fmt.Printf("%-7s %q\n", "Ok", doc.Filename)
+		}
 	}
 }
 

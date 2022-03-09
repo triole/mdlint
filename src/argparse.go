@@ -18,10 +18,12 @@ var (
 	appName        = "mdlint"
 	appDescription = "simple mdlinter that checks the document's front matter"
 	appMainversion = "0.1"
+	exitCode       = 0
 )
 
 var CLI struct {
-	Filename    string `help:"file to process, positional arg required" arg optional`
+	Target      string `help:"can be file or folder, if folder files to process are detected" arg optional`
+	ErrorsOnly  bool   `help:"print only files where errors occured" short:e`
 	VersionFlag bool   `help:"display version" short:V`
 }
 
@@ -48,8 +50,8 @@ func parseArgs() {
 		printBuildTags(BUILDTAGS)
 		os.Exit(0)
 	}
-	if CLI.Filename == "" {
-		fmt.Printf("%s\n", "Error: Positional arg expected. Please pass file name.")
+	if CLI.Target == "" {
+		fmt.Printf("%s\n", "Error: Positional arg expected. Please pass file or folder name.")
 		os.Exit(1)
 	}
 	// ctx.FatalIfErrorf(err)
