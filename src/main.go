@@ -7,7 +7,7 @@ func main() {
 
 	mdFileList := []string{CLI.Target}
 	if isFolder(CLI.Target) == true {
-		mdFileList = find(CLI.Target, "\\.md$")
+		mdFileList = find(CLI.Target, CLI.Filter)
 	}
 
 	for _, mdFile := range mdFileList {

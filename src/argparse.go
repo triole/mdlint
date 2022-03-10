@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"path"
 	"path/filepath"
 	"regexp"
 	"strconv"
@@ -22,13 +21,13 @@ var (
 )
 
 var CLI struct {
-	Target      string `help:"can be file or folder, if folder files to process are detected" arg optional`
-	ErrorsOnly  bool   `help:"print only files where errors occured" short:e`
+	Target      string `help:"can be file or folder, if folder files to process are detected recursively" arg optional`
+	Filter      string `help:"file detection filter when folder given, default is '\.md$'" short:f default:\.md$ placeholder:"<regex>"`
+	InvalidOnly bool   `help:"print out validation result of invalid files only" short:o`
 	VersionFlag bool   `help:"display version" short:V`
 }
 
 func parseArgs() {
-	curdir, _ := os.Getwd()
 	ctx := kong.Parse(&CLI,
 		kong.Name(appName),
 		kong.Description(appDescription),
@@ -39,10 +38,6 @@ func parseArgs() {
 			NoAppSummary: true,
 			FlagsLast:    false,
 		}),
-		kong.Vars{
-			"curdir": curdir,
-			"config": path.Join(getBindir(), appName+".toml"),
-		},
 	)
 	_ = ctx.Run()
 

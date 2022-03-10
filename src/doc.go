@@ -55,7 +55,7 @@ func (doc *tDocument) validate() {
 		fmt.Printf("%-7s %q, %s\n", "Invalid", doc.Filename, doc.Errors)
 		exitCode = 1
 	} else {
-		if CLI.ErrorsOnly == false {
+		if CLI.InvalidOnly == false {
 			fmt.Printf("%-7s %q\n", "Ok", doc.Filename)
 		}
 	}
