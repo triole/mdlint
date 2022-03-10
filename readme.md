@@ -16,9 +16,10 @@ A simple markdown linter that currently only evaluates if the file's front matte
 simple mdlinter that checks the document's front matter
 
 Arguments:
-  [<filename>]    file to process, positional arg required
+  [<target>]    can be file or folder, if folder files to process are detected
 
 Flags:
   -h, --help            Show context-sensitive help.
+  -e, --errors-only     print only files where errors occured
   -V, --version-flag    display version
 ```
