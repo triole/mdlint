@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"sort"
 )
 
 func isFolder(target string) bool {
@@ -47,6 +48,20 @@ func find(basedir string, rxFilter string) []string {
 		os.Exit(1)
 	}
 	return filelist
+}
+
+func makeAlphaIterator(m map[string]string) (arr []string) {
+	for k := range m {
+		arr = append(arr, k)
+	}
+	sort.Strings(arr)
+	return
+}
+
+func rxFind(rx string, str string) (r string) {
+	temp, _ := regexp.Compile(rx)
+	r = temp.FindString(str)
+	return
 }
 
 func pprint(i interface{}) {

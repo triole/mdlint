@@ -21,10 +21,11 @@ var (
 )
 
 var CLI struct {
-	Target      string `help:"can be file or folder, if folder files to process are detected recursively" arg optional`
-	Filter      string `help:"file detection filter when folder given, default is '\.md$'" short:f default:\.md$ placeholder:"<regex>"`
-	InvalidOnly bool   `help:"print out validation result of invalid files only" short:o`
-	VersionFlag bool   `help:"display version" short:V`
+	Target      string            `help:"can be file or folder, if folder files to process are detected recursively" arg optional`
+	Filter      string            `help:"file detection filter when folder given, default is '\.md$'" short:f default:\.md$ placeholder:"REGEX"`
+	Fmkeys      map[string]string `help:"evaluate a distinct front matter key and its value type, can be used multiple times  (i.e. -k index=int -k no=float -k title=string -k tags=slice -k m=map)" short:k sep:","`
+	InvalidOnly bool              `help:"print out validation result of invalid files only" short:o`
+	VersionFlag bool              `help:"display version" short:V`
 }
 
 func parseArgs() {

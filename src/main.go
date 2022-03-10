@@ -1,9 +1,15 @@
 package main
 
-import "os"
+import (
+	"fmt"
+	"os"
+	"reflect"
+)
 
 func main() {
 	parseArgs()
+
+	fmt.Printf("%q\n", reflect.ValueOf(map[string]string{}).Kind())
 
 	mdFileList := []string{CLI.Target}
 	if isFolder(CLI.Target) == true {
