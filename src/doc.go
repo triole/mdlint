@@ -69,15 +69,24 @@ func (doc *tDocument) evaluateFrontMatter() {
 	for _, key := range doc.Conf.FmKeysIterator {
 		val := doc.Conf.CLI.FmKeys[key]
 		fmVal := doc.FrontMatter[key]
-		fmValKind := rxFind(
-			"^[a-z]+", fmt.Sprintf("%s", reflect.ValueOf(fmVal).Kind()),
-		)
-		if val != fmValKind {
+		if fmVal == nil {
 			doc.addError(
 				fmt.Errorf(
-					"front matter entry %q is %s not %s", key, fmValKind, val,
+					"front matter entry %q does not exist", key,
 				),
 			)
+		} else {
+			fmValKind := rxFind(
+				"^[a-z]+", fmt.Sprintf("%s", reflect.ValueOf(fmVal).Kind()),
+			)
+			if val != fmValKind {
+				fmt.Printf("%q\n", fmVal)
+				doc.addError(
+					fmt.Errorf(
+						"front matter entry %q is %s not %s", key, fmValKind, val,
+					),
+				)
+			}
 		}
 	}
 }
