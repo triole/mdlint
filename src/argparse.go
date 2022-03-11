@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
@@ -80,19 +79,4 @@ func printBuildTags(buildtags string) {
 		fmt.Printf("%"+strconv.Itoa(maxlen)+"s\t%s\n", el.Key, el.Val)
 	}
 	fmt.Printf("\n")
-}
-
-func alnum(s string) string {
-	s = strings.ToLower(s)
-	re := regexp.MustCompile("[^a-z0-9_-]")
-	return re.ReplaceAllString(s, "-")
-}
-
-func getBindir() (s string) {
-	ex, err := os.Executable()
-	if err != nil {
-		panic(err)
-	}
-	s = filepath.Dir(ex)
-	return
 }
