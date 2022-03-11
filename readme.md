@@ -1,4 +1,4 @@
-# Mdlint
+# Mdlint ![example workflow](https://github.com/triole/mdlint/actions/workflows/build.yaml/badge.svg)
 
 <!--- mdtoc: toc begin -->
 
@@ -20,9 +20,18 @@ Arguments:
                 recursively
 
 Flags:
-  -h, --help              Show context-sensitive help.
-  -f, --filter=<regex>    file detection filter when folder given, default is
-                          '\.md$'
-  -o, --invalid-only      print out validation result of invalid files only
-  -V, --version-flag      display version
+  -h, --help                    Show context-sensitive help.
+  -f, --filter=REGEX            file detection filter when folder given, default
+                                is '\.md$'
+  -e, --fmkeys=KEY=VALUE;...    evaluate a distinct front matter key and its
+                                value type, can be used multiple times (i.e. -e
+                                index=int -e no=float -e title=string -e
+                                tags=slice -e m=map)
+  -s, --fmstrinct               strictly evaluate front matter, documents are
+                                considered to be invalid if front matter
+                                contains a key that wasn't provided with the
+                                'fmkeys' arg
+  -o, --invalid-only            print out validation result of invalid files
+                                only
+  -V, --version-flag            display version
 ```
