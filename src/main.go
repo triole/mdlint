@@ -6,15 +6,17 @@ import (
 
 func main() {
 	parseArgs()
+	conf := initConf()
 
-	mdFileList := []string{CLI.Target}
-	if isFolder(CLI.Target) == true {
-		mdFileList = find(CLI.Target, CLI.Filter)
+	mdFileList := []string{conf.CLI.Target}
+	if isFolder(conf.CLI.Target) == true {
+		mdFileList = find(conf.CLI.Target, conf.CLI.Filter)
 	}
 
 	for _, mdFile := range mdFileList {
-		doc := parseMarkdown(mdFile)
+		doc := initDocument(mdFile, conf)
 		doc.validate()
+		doc.printOutput()
 	}
 	os.Exit(exitCode)
 }

@@ -17,6 +17,7 @@ type tDocument struct {
 	Rest        tStringByte
 	Errors      []string
 	IsValid     bool
+	Conf        tConf
 }
 
 type tStringByte struct {
@@ -24,10 +25,12 @@ type tStringByte struct {
 	String string
 }
 
-func parseMarkdown(filename string) (doc tDocument) {
-	doc.Filename = filename
+func initDocument(filename string, conf tConf) (doc tDocument) {
+	doc = tDocument{
+		Filename: filename,
+		Conf:     conf,
+	}
 	doc.readFile()
-	doc.splitFrontMatter()
 	return doc
 }
 
@@ -39,6 +42,13 @@ func (doc *tDocument) readFile() {
 	return
 }
 
+func (doc *tDocument) validate() {
+	doc.splitFrontMatter()
+	if doc.IsValid == true && len(doc.Conf.CLI.FmKeys) > 0 {
+		doc.evaluateFrontMatter(doc.FrontMatter)
+	}
+}
+
 func (doc *tDocument) splitFrontMatter() {
 	var mat tMatter
 	var err error
@@ -48,15 +58,27 @@ func (doc *tDocument) splitFrontMatter() {
 	doc.addError(err)
 	doc.FrontMatter = mat
 
-	if err == nil && len(CLI.Fmkeys) > 0 {
-		doc.strictlyEvaluateFrontMatter(doc.FrontMatter)
-	}
-
 	doc.Rest.String = string(doc.Rest.Bytes)
 	return
 }
 
-func (doc *tDocument) validate() {
+func (doc *tDocument) evaluateFrontMatter(frontMatter map[string]interface{}) {
+	for _, key := range doc.Conf.FmKeysIterator {
+		val := doc.Conf.CLI.FmKeys[key]
+		fmVal := frontMatter[key]
+		fmValKind := rxFind(
+			"^[a-z]+", fmt.Sprintf("%s", reflect.ValueOf(fmVal).Kind()),
+		)
+		if val != fmValKind {
+			err := fmt.Errorf(
+				"front matter entry %q is %s not %s", key, fmValKind, val,
+			)
+			doc.addError(err)
+		}
+	}
+}
+
+func (doc *tDocument) printOutput() {
 	if len(doc.Errors) > 0 {
 		fmt.Printf(
 			"%-7s %q, [%s]\n", "Invalid",
@@ -64,7 +86,7 @@ func (doc *tDocument) validate() {
 		)
 		exitCode = 1
 	} else {
-		if CLI.InvalidOnly == false {
+		if doc.Conf.CLI.InvalidOnly == false {
 			fmt.Printf("%-7s %q\n", "Ok", doc.Filename)
 		}
 	}
@@ -79,21 +101,4 @@ func (doc *tDocument) addError(err error) {
 
 func (doc *tDocument) isValid() (b bool) {
 	return len(doc.Errors) == 0
-}
-
-func (doc *tDocument) strictlyEvaluateFrontMatter(frontMatter map[string]interface{}) {
-	iterator := makeAlphaIterator(CLI.Fmkeys)
-	for _, key := range iterator {
-		val := CLI.Fmkeys[key]
-		fmVal := frontMatter[key]
-		fmValKind := rxFind(
-			"^[a-z]+", fmt.Sprintf("%s", reflect.ValueOf(fmVal).Kind()),
-		)
-		if val != fmValKind {
-			err := fmt.Errorf(
-				"front matter entry %q is %s not %s", key, fmValKind, val,
-			)
-			doc.addError(err)
-		}
-	}
 }

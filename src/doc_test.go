@@ -8,7 +8,9 @@ func TestSplitFrontmatter(t *testing.T) {
 }
 
 func validateSplitFrontMatter(filename string, expectation bool, t *testing.T) {
-	doc := parseMarkdown(filename)
+	conf := tConf{}
+	doc := initDocument(filename, conf)
+	doc.validate()
 	if doc.IsValid != expectation {
 		t.Errorf(
 			"Split front matter failed: %s, exp: %v, res: %v",
