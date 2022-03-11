@@ -3,6 +3,7 @@ package main
 type tConf struct {
 	CLI            tCLI
 	FmKeysIterator []string
+	FileList       []string
 }
 
 type tCLI struct {
@@ -14,7 +15,7 @@ type tCLI struct {
 }
 
 func initConf() (conf tConf) {
-	return tConf{
+	conf = tConf{
 		CLI: tCLI{
 			Target:      CLI.Target,
 			Filter:      CLI.Filter,
@@ -24,4 +25,14 @@ func initConf() (conf tConf) {
 		},
 		FmKeysIterator: makeAlphaIterator(CLI.Fmkeys),
 	}
+	conf.FileList = detectFiles(conf.CLI.Target, conf.CLI.Filter)
+	return
+}
+
+func detectFiles(target, filter string) (fileList []string) {
+	fileList = []string{target}
+	if isFolder(target) == true {
+		fileList = find(target, filter)
+	}
+	return
 }

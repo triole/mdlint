@@ -8,12 +8,7 @@ func main() {
 	parseArgs()
 	conf := initConf()
 
-	mdFileList := []string{conf.CLI.Target}
-	if isFolder(conf.CLI.Target) == true {
-		mdFileList = find(conf.CLI.Target, conf.CLI.Filter)
-	}
-
-	for _, mdFile := range mdFileList {
+	for _, mdFile := range conf.FileList {
 		doc := initDocument(mdFile, conf)
 		doc.validate()
 		doc.printOutput()
