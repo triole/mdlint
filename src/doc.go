@@ -45,7 +45,10 @@ func (doc *tDocument) readFile() {
 func (doc *tDocument) validate() {
 	doc.splitFrontMatter()
 	if doc.IsValid == true && len(doc.Conf.CLI.FmKeys) > 0 {
-		doc.evaluateFrontMatter(doc.FrontMatter)
+		doc.evaluateFrontMatter()
+	}
+	if doc.IsValid && doc.Conf.CLI.FmStrict == true {
+		doc.strictlyEvaluateFrontMatter()
 	}
 }
 
@@ -62,19 +65,32 @@ func (doc *tDocument) splitFrontMatter() {
 	return
 }
 
-func (doc *tDocument) evaluateFrontMatter(frontMatter map[string]interface{}) {
+func (doc *tDocument) evaluateFrontMatter() {
 	for _, key := range doc.Conf.FmKeysIterator {
 		val := doc.Conf.CLI.FmKeys[key]
-		fmVal := frontMatter[key]
+		fmVal := doc.FrontMatter[key]
 		fmValKind := rxFind(
 			"^[a-z]+", fmt.Sprintf("%s", reflect.ValueOf(fmVal).Kind()),
 		)
 		if val != fmValKind {
-			err := fmt.Errorf(
-				"front matter entry %q is %s not %s", key, fmValKind, val,
+			doc.addError(
+				fmt.Errorf(
+					"front matter entry %q is %s not %s", key, fmValKind, val,
+				),
 			)
-			doc.addError(err)
 		}
+	}
+}
+
+func (doc *tDocument) strictlyEvaluateFrontMatter() {
+	iterator := makeAlphaIteratorItf(doc.FrontMatter)
+	if reflect.DeepEqual(iterator, doc.Conf.FmKeysIterator) == false {
+		doc.addError(
+			fmt.Errorf(
+				"strictly evaluate front matter failed: its keys are %s not %s",
+				iterator, doc.Conf.FmKeysIterator,
+			),
+		)
 	}
 }
 

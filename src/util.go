@@ -50,6 +50,13 @@ func find(basedir string, rxFilter string) []string {
 	return filelist
 }
 
+func makeAlphaIteratorItf(m map[string]interface{}) (arr []string) {
+	for k := range m {
+		arr = append(arr, k)
+	}
+	sort.Strings(arr)
+	return
+}
 func makeAlphaIterator(m map[string]string) (arr []string) {
 	for k := range m {
 		arr = append(arr, k)
