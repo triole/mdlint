@@ -17,7 +17,6 @@ var (
 	appName        = "mdlint"
 	appDescription = "simple mdlinter that checks the document's front matter"
 	appMainversion = "0.1"
-	exitCode       = 0
 )
 
 var CLI struct {

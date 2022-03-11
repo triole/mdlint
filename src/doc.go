@@ -109,7 +109,6 @@ func (doc *tDocument) printOutput() {
 			"%-7s %q, [%s]\n", "Invalid",
 			doc.Filename, strings.Join(doc.Errors, ", "),
 		)
-		exitCode = 1
 	} else {
 		if doc.Conf.CLI.InvalidOnly == false {
 			fmt.Printf("%-7s %q\n", "Ok", doc.Filename)
