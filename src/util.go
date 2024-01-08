@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -34,7 +33,7 @@ func find(basedir string, rxFilter string) []string {
 		if rxf.MatchString(path) {
 			inf, err := os.Stat(path)
 			if err == nil {
-				if inf.IsDir() == false {
+				if !inf.IsDir() {
 					filelist = append(filelist, path)
 				}
 			} else {
@@ -69,9 +68,4 @@ func rxFind(rx string, str string) (r string) {
 	temp, _ := regexp.Compile(rx)
 	r = temp.FindString(str)
 	return
-}
-
-func pprint(i interface{}) {
-	s, _ := json.MarshalIndent(i, "", "\t")
-	fmt.Println(string(s))
 }

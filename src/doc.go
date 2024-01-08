@@ -39,15 +39,14 @@ func (doc *tDocument) readFile() {
 	doc.FullContent.Bytes, err = ioutil.ReadFile(doc.Filename)
 	doc.addError(err)
 	doc.FullContent.String = string(doc.FullContent.Bytes)
-	return
 }
 
 func (doc *tDocument) validate() {
 	doc.splitFrontMatter()
-	if doc.IsValid == true && len(doc.Conf.CLI.FmKeys) > 0 {
+	if doc.IsValid && len(doc.Conf.CLI.FmKeys) > 0 {
 		doc.evaluateFrontMatter()
 	}
-	if doc.IsValid && doc.Conf.CLI.FmStrict == true {
+	if doc.IsValid && doc.Conf.CLI.FmStrict {
 		doc.strictlyEvaluateFrontMatter()
 	}
 }
@@ -60,9 +59,7 @@ func (doc *tDocument) splitFrontMatter() {
 	)
 	doc.addError(err)
 	doc.FrontMatter = mat
-
 	doc.Rest.String = string(doc.Rest.Bytes)
-	return
 }
 
 func (doc *tDocument) evaluateFrontMatter() {
@@ -77,7 +74,7 @@ func (doc *tDocument) evaluateFrontMatter() {
 			)
 		} else {
 			fmValKind := rxFind(
-				"^[a-z]+", fmt.Sprintf("%s", reflect.ValueOf(fmVal).Kind()),
+				"^[a-z]+", reflect.ValueOf(fmVal).Kind().String(),
 			)
 			if val != fmValKind {
 				fmt.Printf("%q\n", fmVal)
@@ -93,7 +90,7 @@ func (doc *tDocument) evaluateFrontMatter() {
 
 func (doc *tDocument) strictlyEvaluateFrontMatter() {
 	iterator := makeAlphaIteratorItf(doc.FrontMatter)
-	if reflect.DeepEqual(iterator, doc.Conf.FmKeysIterator) == false {
+	if !reflect.DeepEqual(iterator, doc.Conf.FmKeysIterator) {
 		doc.addError(
 			fmt.Errorf(
 				"strictly evaluate front matter failed: its keys are %s not %s",
@@ -110,7 +107,7 @@ func (doc *tDocument) printOutput() {
 			doc.Filename, strings.Join(doc.Errors, ", "),
 		)
 	} else {
-		if doc.Conf.CLI.InvalidOnly == false {
+		if !doc.Conf.CLI.InvalidOnly {
 			fmt.Printf("%-7s %q\n", "Ok", doc.Filename)
 		}
 	}

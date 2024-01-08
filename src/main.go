@@ -14,7 +14,7 @@ func main() {
 		doc := initDocument(mdFile, conf)
 		doc.validate()
 		doc.printOutput()
-		if doc.IsValid == false {
+		if !doc.IsValid {
 			errorCount++
 		}
 	}

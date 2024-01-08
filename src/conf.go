@@ -31,7 +31,7 @@ func initConf() (conf tConf) {
 
 func detectFiles(target, filter string) (fileList []string) {
 	fileList = []string{target}
-	if isFolder(target) == true {
+	if isFolder(target) {
 		fileList = find(target, filter)
 	}
 	return
