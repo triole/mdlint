@@ -19,7 +19,7 @@ func main() {
 		}
 	}
 	if errorCount > 0 {
-		fmt.Printf("%v invalid files, ", errorCount)
+		fmt.Printf("%v invalid file(s)\n", errorCount)
 		os.Exit(1)
 	}
 }

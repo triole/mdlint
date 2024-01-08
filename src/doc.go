@@ -77,10 +77,9 @@ func (doc *tDocument) evaluateFrontMatter() {
 				"^[a-z]+", reflect.ValueOf(fmVal).Kind().String(),
 			)
 			if val != fmValKind {
-				fmt.Printf("%q\n", fmVal)
 				doc.addError(
 					fmt.Errorf(
-						"front matter entry %q is %s not %s", key, fmValKind, val,
+						"front matter entry %q is %s, not %s", key, fmValKind, val,
 					),
 				)
 			}
