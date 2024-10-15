@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -12,7 +11,8 @@ import (
 func isFolder(target string) bool {
 	info, err := os.Stat(target)
 	if os.IsNotExist(err) {
-		log.Fatal("File does not exist.")
+		fmt.Printf("file does not exist: %s", err)
+		os.Exit(1)
 	}
 	if info.IsDir() {
 		return true
@@ -23,7 +23,7 @@ func isFolder(target string) bool {
 func find(basedir string, rxFilter string) []string {
 	_, err := os.Stat(basedir)
 	if err != nil {
-		fmt.Printf("Fail access md folder %q\n", err)
+		fmt.Printf("can not access folder %q\n", err)
 		os.Exit(1)
 	}
 	filelist := []string{}
@@ -37,13 +37,13 @@ func find(basedir string, rxFilter string) []string {
 					filelist = append(filelist, path)
 				}
 			} else {
-				print("Fail stat file %q", err)
+				print("stat file failed %q", err)
 			}
 		}
 		return nil
 	})
 	if err != nil {
-		fmt.Printf("Fail find files %q\n", err)
+		fmt.Printf("unable to detect files %q\n", err)
 		os.Exit(1)
 	}
 	return filelist

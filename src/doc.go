@@ -102,12 +102,12 @@ func (doc *tDocument) strictlyEvaluateFrontMatter() {
 func (doc *tDocument) printOutput() {
 	if len(doc.Errors) > 0 {
 		fmt.Printf(
-			"%-7s %q, [%s]\n", "Invalid",
+			"%-7s %s, [%s]\n", "invalid",
 			doc.Filename, strings.Join(doc.Errors, ", "),
 		)
 	} else {
 		if !doc.Conf.CLI.InvalidOnly {
-			fmt.Printf("%-7s %q\n", "Ok", doc.Filename)
+			fmt.Printf("%-7s %s\n", "ok", doc.Filename)
 		}
 	}
 }
