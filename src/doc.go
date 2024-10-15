@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"reflect"
 	"strings"
 
@@ -36,7 +36,7 @@ func initDocument(filename string, conf tConf) (doc tDocument) {
 
 func (doc *tDocument) readFile() {
 	var err error
-	doc.FullContent.Bytes, err = ioutil.ReadFile(doc.Filename)
+	doc.FullContent.Bytes, err = os.ReadFile(doc.Filename)
 	doc.addError(err)
 	doc.FullContent.String = string(doc.FullContent.Bytes)
 }
